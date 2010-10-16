@@ -2,13 +2,22 @@
 
 class MDB
 {
-  public function __construct() {
-		$this->conn = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die('Could not connect: ' . mysql_error());
-		mysql_select_db(DB_NAME, $this->conn) or die('Could not select database');
-		return;
+  public function __construct($conn = null) {
+    $this->conn = is_resource($conn)
+      ? $conn
+      : $this->connect();
   }
   
+
   
+  private function connect() {
+    $conn = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die('Could not connect: ' . mysql_error());
+    mysql_select_db(DB_NAME, $conn) or die('Could not select database');
+    return $conn;
+  }
+
+
+
   private function query($query, $args = array()) {
     $query = str_replace('#__', DB_PREFIX, $query);
     $args = array_map('escape', $args);
@@ -20,26 +29,26 @@ class MDB
   
   public function getMovies() {
     $result = $this->query('SELECT `#__movies`.*, 
-GROUP_CONCAT( DISTINCT `crew_names`.`name` ORDER BY `#__crew`.`order` ASC SEPARATOR ", ") AS `crew_names`,
-GROUP_CONCAT( DISTINCT `crew_names`.`id` ORDER BY `#__crew`.`order` ASC SEPARATOR ",") AS `crew_ids`,
-GROUP_CONCAT( DISTINCT `cast_names`.`name` ORDER BY `#__cast`.`order` ASC SEPARATOR ", ") AS `cast_names`,
-GROUP_CONCAT( DISTINCT `cast_names`.`id` ORDER BY `#__cast`.`order` ASC SEPARATOR ",") AS `cast_ids`
-FROM `#__movies`
-LEFT JOIN `#__crew` ON `#__crew`.`movie_id` = `#__movies`.`id`
-LEFT JOIN `#__cast` ON `#__cast`.`movie_id` = `#__movies`.`id`
-LEFT JOIN `#__names` AS `crew_names` ON `crew_names`.`id` = `#__crew`.`name_id`
-LEFT JOIN `#__names` AS `cast_names` ON `cast_names`.`id` = `#__cast`.`name_id`
-GROUP BY `#__movies`.`id`
-ORDER BY `#__movies`.`title`');
+        GROUP_CONCAT( DISTINCT `crew_names`.`name` ORDER BY `#__crew`.`order` ASC SEPARATOR ", ") AS `crew_names`,
+        GROUP_CONCAT( DISTINCT `crew_names`.`id` ORDER BY `#__crew`.`order` ASC SEPARATOR ",") AS `crew_ids`,
+        GROUP_CONCAT( DISTINCT `cast_names`.`name` ORDER BY `#__cast`.`order` ASC SEPARATOR ", ") AS `cast_names`,
+        GROUP_CONCAT( DISTINCT `cast_names`.`id` ORDER BY `#__cast`.`order` ASC SEPARATOR ",") AS `cast_ids`
+      FROM `#__movies`
+        LEFT JOIN `#__crew` ON `#__crew`.`movie_id` = `#__movies`.`id`
+        LEFT JOIN `#__cast` ON `#__cast`.`movie_id` = `#__movies`.`id`
+        LEFT JOIN `#__names` AS `crew_names` ON `crew_names`.`id` = `#__crew`.`name_id`
+        LEFT JOIN `#__names` AS `cast_names` ON `cast_names`.`id` = `#__cast`.`name_id`
+      GROUP BY `#__movies`.`id`
+      ORDER BY `#__movies`.`title`');
     
     if (mysql_num_rows($result) == 0)
-			return false;
-		else {
-			$toreturn = array();
-			while ($row = mysql_fetch_array($result))
-				$toreturn[] = $row;
-			return $toreturn;
-		}
+      return false;
+    else {
+      $toreturn = array();
+      while ($row = mysql_fetch_array($result))
+        $toreturn[] = $row;
+      return $toreturn;
+    }
   }
   
   
@@ -143,16 +152,43 @@ ORDER BY `#__movies`.`title`');
     $result = $this->query('SELECT `id` FROM `#__imdbtop250` ORDER BY `order`');
     
     if (mysql_num_rows($result) == 0)
-			return false;
-		else {
-			$toreturn = array();
-			while ($row = mysql_fetch_array($result))
-				$toreturn[] = $row;
-			return $toreturn;
-		}
+      return false;
+    else {
+      $toreturn = array();
+      while ($row = mysql_fetch_array($result))
+        $toreturn[] = $row;
+      return $toreturn;
+    }
+  }
+
+
+
+  public function getOption($name, $default = null) {
+    $result = $this->query('SELECT `value` FROM `#__options` WHERE `name`=%s', array($name));
+    
+    if (!$result || mysql_num_rows($result) == 0)
+      return $default;
+    
+    return mysql_result($result, 0);
+  }
+  
+  
+  
+  public function setOption($name, $value) {
+    $result = $this->query('INSERT INTO `#__options` (`name`, `value`) VALUES (%s,%s) ON DUPLICATE KEY UPDATE `value` = %2$s', array($name, $value));
+    
+    return $result && mysql_affected_rows($this->conn) == 1;
+  }
+  
+  
+  
+  public function getVersion() {
+    return @$this->getOption('db_version');
+  }
+  
+  
+  
+  public function setVersion($version) {
+    return $this->setOption('db_version', $version);
   }
 }
-
-
-
-?>

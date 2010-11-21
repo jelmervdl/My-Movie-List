@@ -90,7 +90,7 @@
    */
   private function title_year() {
     if ($this->page["Title"] == "") $this->openpage ("Title");
-    if (@preg_match("/\<title\>(.*) \((\d{4}|\?{4}).*\)\<\/title\>/",$this->page["Title"],$match)) {
+    if (preg_match("/\<title\>(.*) \((\d{4}|\?{4}).*\) - IMDb\<\/title\>/",$this->page["Title"],$match)) {
       $this->main_title = $match[1];
       if ($match[2]=="????") $this->main_year = "";
       else $this->main_year  = $match[2];
@@ -142,7 +142,7 @@
   private function runtime_all() {
     if ($this->main_runtime == "") {
       if ($this->page["Title"] == "") $this->openpage ("Title");
-      if (@preg_match("/Runtime:\<\/h5\>\s*<[^>]*>\s*(.*?)\n/m",$this->page["Title"],$match))
+      if (@preg_match("{<div class=\"infobar\">\s*(?:<img[^>]+>)?(?:&nbsp;)+(.+?)(?:&nbsp;)+-(?:&nbsp;)+<a}",$this->page["Title"],$match))
         $this->main_runtime = $match[1];
     }
     return $this->main_runtime;
@@ -265,7 +265,7 @@
   public function language() {
    if ($this->main_language == "") {
      if (empty($this->langs)) $this->langs = $this->languages();
-     $this->main_language = $this->langs[0];
+     $this->main_language = current($this->langs);
    }
    return $this->main_language;
   }
@@ -278,8 +278,8 @@
   public function languages() {
    if (empty($this->langs)) {
     if ($this->page["Title"] == "") $this->openpage ("Title");
-    if (preg_match_all("/\/Sections\/Languages\/.*?>\s*(.*?)\s*</m",$this->page["Title"],$matches))
-      $this->langs = $matches[1];
+    if (preg_match_all("{<a href=\"/language/([a-z]{2})\">([^<]+)</a>}",$this->page["Title"],$matches))
+      $this->langs = array_combine($matches[1], $matches[2]);
    }
    return $this->langs;
   }
@@ -310,7 +310,7 @@
   public function genres() {
     if (empty($this->moviegenres)) {
       if ($this->page["Title"] == "") $this->openpage ("Title");
-      if (preg_match_all("/\<a href\=\"\/Sections\/Genres\/[\w\-]+\/\"\>(.*?)\<\/a\>/",$this->page["Title"],$matches))
+      if (preg_match_all("{<a href=\"/genre/(\w+)\">\\1</a>}i",$this->page["Title"],$matches))
         $this->moviegenres = $matches[1];
     }
     return $this->moviegenres;
@@ -522,10 +522,10 @@
    */
   public function country() {
    if (empty($this->countries)) {
-    if ($this->page["Title"] == "") $this->openpage ("Title");
+	if ($this->page["Title"] == "") $this->openpage ("Title");
     $this->countries = array();
-    if (preg_match_all("/\/Sections\/Countries\/\w+\/\"\>\s*(.*?)<\/a/m",$this->page["Title"],$matches))
-      for ($i=0;$i<count($matches[0]);++$i) $this->countries[$i] = $matches[1][$i];
+    if (preg_match_all("{<a href=\"/country/([a-z]{2})\">([^<]+)</a>}",$this->page["Title"],$matches))
+      $this->countries = array_combine($matches[1], $matches[2]);
    }
    return $this->countries;
   }
@@ -540,37 +540,21 @@
    *         up on the imdb sites, it's hard to tell what is an additional country
    *         and what is a comment...
    * @see IMDB page / (TitlePage)
+   *
+   * NOTE: this function is more or less broken since the new IMDb remake doesn't
+   *       display this anymore. Still providing the same markup for
+   *       compatibility reasons
    */
   public function alsoknow() {
    if (empty($this->akas)) {
     if ($this->page["Title"] == "") $this->openpage ("Title");
-    $ak_s = strpos ($this->page["Title"], "Also Known As:</h5>");
-    if ($ak_s>0) $ak_s += 45;
-    if ($ak_s == 0) $ak_s = strpos ($this->page["Title"], "Alternativ:");
-    if ($ak_s == 0) return array();
-    $alsoknow_end = strpos ($this->page["Title"], "</div>", $ak_s);
-    $alsoknow_all = substr($this->page["Title"], $ak_s, $alsoknow_end - $ak_s);
-
-    $aka_arr = explode("<br>",str_replace("\n","",$alsoknow_all));
-    foreach ($aka_arr as $aka) {
-      $aka = trim($aka);
-      if (strpos('class="tn15more"',$aka)>0) break; // end of list
-      if (empty($aka)) continue;
-      if (!preg_match("/\(/",$aka)) $this->akas[] = array("title"=>$aka,"year"=>"","country"=>"","comment"=>"");
-      elseif (preg_match("/<i class=\"transl\">([^\[]+?) (\(\d{4}\) |)(\([^\[]+)\s*\[(.*?)\]<\/i>/",$aka,$match)) { // localized variants on akas.imdb.com
-        if (preg_match_all("/\((.*?)\)/",$match[3],$countries)) {
-          $country = $countries[1][0]; $comment = "";
-          for ($i=1;$i<count($countries[0]);++$i) $comment .= ", ".$countries[1][$i];
-        } else $country = $comment = "";
-        $this->akas[] = array("title"=>preg_replace('|(\<.*?\>)|','',$match[1]),"year"=>$match[2],"country"=>$country,"comment"=>substr($comment,2),"lang"=>$match[4]);
-      } elseif (preg_match("/(.*?) (\(\d{4}\) |)\((.*?)\)(.*?(\(.*\))|)/",$aka,$match)) {
-        if (!empty($match[5]) && preg_match_all("/\((.*?)\)/",$match[5],$comments)) {
-          $comm = $comments[1][0];
-          for ($i=1;$i<count($comments[0]);++$i) $comm .= ", ".$comments[1][$i];
-        } else $comm = "";
-        $this->akas[] = array("title"=>preg_replace('|(\<.*?\>)|','',$match[1]),"year"=>$match[2],"country"=>$match[3],"comment"=>$comm);
-      }
-    }
+    $this->akas = array();
+    if (preg_match('{<h4 class="inline">Also Known As:</h4>([^<]+)$}m', $this->page['Title'], $matches))
+      $this->akas[] = array(
+		'title' => trim($matches[1]),
+		'year' => null,
+		'country' => null,
+		'comment' => null);
    }
    return $this->akas;
   }

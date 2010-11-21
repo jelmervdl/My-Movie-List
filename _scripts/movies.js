@@ -10,7 +10,10 @@ var Movies = {
     columnOffsetYear: 4,
     columnOffsetRuntime: 5,
     columnOffsetRating: 6,
-    genres: ['Action', 'Adventure', 'Animation', 'Biography', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'History', 'Horror', 'Music', 'Musical', 'Mystery', 'Sci-Fi', 'Short', 'Sport', 'Talk Show', 'Thriller', 'War', 'Western'],
+    genres: ['Action','Adventure','Animation','Biography','Comedy','Crime',
+      'Documentary','Drama','Family','Fantasy','Film-Noir','Game-Show','History',
+      'Horror','Music','Musical','Mystery','News','Reality-TV','Romance','Sci-Fi',
+      'Sport','Talk-Show','Thriller','War','Western'],
     imdbIds: ''
   },
   

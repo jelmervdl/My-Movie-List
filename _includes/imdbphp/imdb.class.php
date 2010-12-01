@@ -142,7 +142,7 @@
   private function runtime_all() {
     if ($this->main_runtime == "") {
       if ($this->page["Title"] == "") $this->openpage ("Title");
-      if (@preg_match("{<div class=\"infobar\">\s*(?:<img[^>]+>)?(?:&nbsp;)+(.+?)(?:&nbsp;)+-(?:&nbsp;)+<a}",$this->page["Title"],$match))
+      if (@preg_match("{<div class=\"infobar\">\s*(?:<img[^>]+>(?:&nbsp;)+)?(.+?)(?:&nbsp;){2}-(?:&nbsp;){2}<a}",$this->page["Title"],$match))
         $this->main_runtime = $match[1];
     }
     return $this->main_runtime;

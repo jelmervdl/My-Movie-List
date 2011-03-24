@@ -225,6 +225,10 @@ select {
   
   #stats #tagcloud span {
     margin-right: 10px;
+    transition: font-size 0.25s ease-in-out;
+    -webkit-transition: font-size 0.25s ease-in-out;
+    -o-transition: font-size 0.25s ease-in-out;
+    -moz-transition: font-size 0.25s ease-in-out;
     text-transform: uppercase;
   }
   

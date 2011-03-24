@@ -484,6 +484,8 @@ var Stats = {
       Stats.cloudElm.id = Stats.config.tagcloudId;
       Stats.panelGenreInfoElm.appendChild(Stats.cloudElm);
     
+    Stats.cloudTagElms = {};
+    
     Stats.listWrapperElm = document.createElement('div');
       addClass(Stats.listWrapperElm, Stats.config.listClass);
       Stats.panelGenreInfoElm.appendChild(Stats.listWrapperElm);
@@ -506,26 +508,32 @@ var Stats = {
       return 1;
     });
     
-    Stats.cloudElm.innerHTML = '';
-    Stats.listOlElm.innerHTML = '';
-    
     // Create the tag cloud
-    for (var genre in Stats.d.genreInfo) if (Stats.d.genreInfo.hasOwnProperty(genre)) {
-      var genreInfo = Stats.d.genreInfo[genre];
+    //Stats.cloudElm.innerHTML = '';
+    for (var genre in Stats.d.genreInfo) {
+      if (Stats.d.genreInfo.hasOwnProperty(genre)) {
+        var genreInfo = Stats.d.genreInfo[genre];
       
-      if (genreInfo[0] !== 0) {
-        var weight = Math.round((7 * (genreInfo[sortColumn - 1] - min)) / (max - min)) + 1;
+        if (genreInfo[0] !== 0) {
+          
+          if (!Stats.cloudTagElms[genre]) {
+            var spanElm = Stats.cloudTagElms[genre] = document.createElement('span');
+              spanElm.appendChild(document.createTextNode(genre));
         
-        var spanElm = document.createElement('span');
-          spanElm.appendChild(document.createTextNode(genre));
-          addClass(spanElm, 'tag-' + weight);
-        
-        Stats.cloudElm.appendChild(spanElm);
-        Stats.cloudElm.appendChild(document.createTextNode(' '));
+            Stats.cloudElm.appendChild(spanElm);
+            Stats.cloudElm.appendChild(document.createTextNode(' '));
+          }
+          else
+            var spanElm = Stats.cloudTagElms[genre];
+          
+          var weight = Math.round((7 * (genreInfo[sortColumn - 1] - min)) / (max - min)) + 1;
+          spanElm.className = 'tag-' + weight;
+        }
       }
     }
     
     // Create the list
+    Stats.listOlElm.innerHTML = '';
     for (var i = Stats.d.genreInfoSorted.length - 1; Stats.d.genreInfoSorted[i]; --i) {
       var genreInfo = Stats.d.genreInfoSorted[i];
       

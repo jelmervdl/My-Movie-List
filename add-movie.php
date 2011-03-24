@@ -37,7 +37,7 @@ class AddMovie
   /*
     Display the searchbox and ID inputbox.
   */
-  public function Step1($message = false) {
+  static public function Step1($message = false) {
     $tpl = new Template(DOCUMENT_ROOT . '_templates/add-movie.tpl');
     $content = new Template(DOCUMENT_ROOT . '_templates/step-1.tpl');
     
@@ -52,7 +52,7 @@ class AddMovie
   /*
     If a search is initiated: view the results.
   */
-  public function Step2() {
+  static public function Step2() {
     if (!isset($_GET['q'])) {
       AddMovie::Step1('invalid-searchterm');
       exit;
@@ -74,7 +74,7 @@ class AddMovie
   /*
    Display the movie, including the rating
   */
-  public function Step3($modernLanguagesFlipped) {
+  static public function Step3($modernLanguagesFlipped) {
     if (isset($_GET['id']) && is_numeric($_GET['id'])) {
       $movie = new imdb($_GET['id']);
       $movie->setid($_GET['id']);
@@ -104,7 +104,7 @@ class AddMovie
   /*
     Insert the movie in the database
   */
-  public function Step4($modernLanguagesFlipped) {
+  static public function Step4($modernLanguagesFlipped) {
     if (isset($_POST['imdbid']) && is_numeric($_POST['imdbid'])) {
       $movie = new imdb($_POST['imdbid']);
       $movie->setid($_POST['imdbid']);
@@ -165,7 +165,7 @@ class AddMovie
         $language = $_POST['language'];
       
       $success = $db->insertMovie($_POST['imdbid'], $title, $englishTitle, $language, $genres, $year, $runtime, $rating);
-      
+
       if ($success)
         header('Location: ./?message=add-success');
       else
@@ -178,7 +178,7 @@ class AddMovie
   
   
   
-  public function utf8ify($string) {
+  static public function utf8ify($string) {
     return html_entity_decode(strip_tags($string), ENT_QUOTES, 'UTF-8');
   }
 }

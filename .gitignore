@@ -1,1 +1,2 @@
 _includes/settings.inc.php
+_includes/imdbphp/cache/cache_*

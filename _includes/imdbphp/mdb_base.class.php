@@ -236,7 +236,7 @@ class mdb_base extends mdb_config {
         $thisdir = dir($this->cachedir);
         $now = time();
         while( $file=$thisdir->read() ) {
-          if ($file!="." && $file!="..") {
+          if ($file[0] != ".") {
             $fname = $this->cachedir . $file;
 	    if (is_dir($fname)) continue;
             $mod = filemtime($fname);
@@ -257,7 +257,7 @@ class mdb_base extends mdb_config {
   * @param ref string content variable to store the retrieved content in
   */
   public function cache_read($file,&$content) {
-    $fname = $this->cachedir . '/' . $file;
+    $fname = $this->cachedir . '/cache_' . $file;
     if (!file_exists($fname)) {
       $this->debug_scalar("cache_read: requested file '$file' not found in cache dir '".$this->cachedir."'");
       $content = '';
@@ -299,7 +299,7 @@ class mdb_base extends mdb_config {
     } elseif (!is_writable($this->cachedir)) {
       $this->debug_scalar("<BR>***ERROR*** Configured cache directory lacks write permission!<BR>");
     } else {
-      $fname = $this->cachedir . '/' . $file;
+      $fname = $this->cachedir . '/cache_' . $file;
       if ( $this->usezip ) {
         $fp = gzopen ($fname, "w");
         gzputs ($fp, $content);

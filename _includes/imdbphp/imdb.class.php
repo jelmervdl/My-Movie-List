@@ -90,7 +90,7 @@
    */
   private function title_year() {
     if ($this->page["Title"] == "") $this->openpage ("Title");
-    if (preg_match("/\<title\>(.*) \((\d{4}|\?{4}).*\) - IMDb\<\/title\>/",$this->page["Title"],$match)) {
+    if (preg_match("/\<title\>(.*) \((?:TV\s)?(\d{4}|\?{4}).*\) - IMDb\<\/title\>/",$this->page["Title"],$match)) {
       $this->main_title = $match[1];
       if ($match[2]=="????") $this->main_year = "";
       else $this->main_year  = $match[2];

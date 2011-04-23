@@ -4,6 +4,7 @@ var Sort = {
     sortedClassDesc: 'sorted-desc'
   },
   
+  prefixExpression: /^(The|A)\s/,
   
   init: function() {
     // This requires the movies.js file to be loaded.
@@ -98,7 +99,7 @@ var Sort = {
         if (type == 'n')
           sortArray[i] = [parseInt(inner, 10), trElms[i]];
         else
-          sortArray[i] = [inner.toLowerCase().replace(/^\s+|\s+$/g, ''), trElms[i]];
+          sortArray[i] = [inner.toLowerCase().replace(Sort.prefixExpression, '').replace(/^\s+|\s+$/g, ''), trElms[i]];
       }
       
       sortArray.sort(function(a, b) {

@@ -172,8 +172,6 @@ $updates[] = new Update(1.2, 1.3, array_merge(array(
 	$ignored_prefix_sql_updates
 ));
 
-$updates[] = new Update(1.3, 1.4, $ignored_prefix_sql_updates);
-
 function generate_prefix_remove_sql($format, $prefixes)
 {
 	$sql = '';

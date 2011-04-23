@@ -39,7 +39,7 @@ class MDB
         LEFT JOIN `#__names` AS `crew_names` ON `crew_names`.`id` = `#__crew`.`name_id`
         LEFT JOIN `#__names` AS `cast_names` ON `cast_names`.`id` = `#__cast`.`name_id`
       GROUP BY `#__movies`.`id`
-      ORDER BY `#__movies`.`title`');
+      ORDER BY `#__movies`.`sort_title`');
     
     if (mysql_num_rows($result) == 0)
       return false;

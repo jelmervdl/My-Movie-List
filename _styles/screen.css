@@ -349,6 +349,14 @@ select {
     width: 100%;
   }
   
+  #advanced-search .query input.placeholder-text {
+    color: #999;
+  }
+  
+  #advanced-search .query input.placeholder-text:focus {
+    color: #000;
+  }
+  
   #advanced-search p {
     line-height: 20px;
   }
@@ -641,7 +649,7 @@ table {
     -moz-border-radius: 20em;
     -webkit-border-radius: 20em;
     display: block;
-    color: #999;
+    color: #000;
     font: 1.2em "Times New Roman", Times, serif;
     height: 20px;
     padding: 1px 8px;
@@ -650,7 +658,11 @@ table {
     top: 0;
     width: 240px;
   }
-
+  
+  #actions input.placeholder-text {
+    color: #999;
+  }
+  
   #actions input:focus {
     border-color: #000;
     color: #000;

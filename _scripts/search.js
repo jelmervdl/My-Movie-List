@@ -19,6 +19,7 @@ var Search = {
     Search.inputElm = document.createElement('input');
       Search.inputElm.value = Search.config.defaultTerm;
       Search.inputElm.defaultValue = Search.config.defaultTerm;
+      addClass(Search.inputElm, 'placeholder-text');
       addEvent(Search.inputElm, 'change', Search.doSimpleSearch);
       addEvent(Search.inputElm, 'keyup', Search.doSimpleSearch);
       addEvent(Search.inputElm, 'focus', Search.niceFocus);
@@ -45,6 +46,7 @@ var Search = {
       Search.isAdvanced = true;
       Search.createAdvancedHtml();
       Search.advancedInputElm.value = Search.inputElm.value;
+      Search.niceBlur.apply(Search.advancedInputElm); // reset placeholder stuff
       Search.doSearch();
       Movies.setActivePanel(Search.advancedSearchElm);
     }
@@ -54,6 +56,7 @@ var Search = {
   // Reset all values to the default ones.
   resetAdvanced: function() {
     Search.advancedInputElm.value = Search.advancedInputElm.getAttribute('value');
+    Search.niceBlur.apply(Search.advancedInputElm); // reset placeholder stuff
     Search.inputNonEnglishOnly.checked = false;
     Search.inputImdb250Only.checked = false;
     Search.inputYearMin.value = Stats.d.yearMin;
@@ -94,8 +97,12 @@ var Search = {
   
   
   niceBlur: function() {
-    if (this.value.length === 0)
+    if (this.value.length === 0) {
       this.value = this.defaultValue;
+      addClass(this, 'placeholder-text');
+    } else {
+      removeClass(this, 'placeholder-text');
+    }
   },
   
   
@@ -342,6 +349,7 @@ var Search = {
               Search.advancedInputElm.type = 'text';
               Search.advancedInputElm.value = Search.config.defaultTerm;
               Search.advancedInputElm.defaultValue = Search.config.defaultTerm;
+              addClass(Search.advancedInputElm, 'placeholder-text');
               addEvent(Search.advancedInputElm, 'keyup', Search.doSearch);
               addEvent(Search.advancedInputElm, 'change', Search.doSearch);
               addEvent(Search.advancedInputElm, 'blur', Search.niceBlur);

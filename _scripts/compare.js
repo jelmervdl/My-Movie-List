@@ -425,7 +425,10 @@ var Compare = {
         var url = Compare.urlInputElm.value;
         if (url.indexOf('/add-movie.php') > -1 || url.indexOf('?message=') > -1)
           url = url.substring(0, url.lastIndexOf('/') + 1);
-        
+        if (!(/^https?:\/\//.test(url))) // add protocol if missing
+          url = 'http://' + url;
+        if (!(/\/$/.test(url))) // add trailing slash if missing
+          url = url + '/';
         var scriptElm = document.createElement('script');
           scriptElm.type = 'text/javascript';
           scriptElm.src = url + 'compare.js.php';

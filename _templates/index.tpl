@@ -121,7 +121,7 @@ endforeach;
     <p class="message">Currently, there are no movies on this list. <a href="./add-movie.php">Add a movie&hellip;</a></p>
 <?php endif; ?>
 
-    <p id="footer">Created with <a href="http://mymovielist.arjaneising.nl">My Movie List</a>.</p>
+    <p id="footer">Created with <a href="http://mymovielist.arjaneising.nl">My Movie List</a> (<a href="https://github.com/jelmervdl/My-Movie-List">forked</a>).</p>
 
 <?php if (LOGGEDIN) : ?>
     <div id="actions"><a href="add-movie.php">Add a movie</a></div>

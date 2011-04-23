@@ -17,6 +17,15 @@ $users = array(
   'admin' => 'password'
 );
 
+/* Prefixes that are ignored in movie titles when sorting */
+/* You should run the $ignored_prefix_sql_updates queries in update.php when
+you change this */
+$ignored_prefixes = array(
+	'A', 'The',
+	'De', 'Het', 'Een',
+	'Le', 'La',
+	'Der', 'Die', 'Das');
+
 /* Maximum amount of names per movie */
 define('MAXNAMES', 20);
 

@@ -58,7 +58,6 @@ function update_database($db, $conn, array $updates)
 			// When successfully applied…
 			if ($update->apply($conn, $error))
 			{
-				echo "Update applied, setting version to {$update->to}";
 				$db->setVersion($update->to);
 				continue 2; // …continue while loop
 			}
@@ -138,26 +137,17 @@ $updates[] = new Update(1.1, 1.2, array(
     'Horror','Music','Musical','Mystery','News','Reality-TV','Romance','Sci-Fi',
     'Sport','Talk-Show','Thriller','War','Western') NOT NULL DEFAULT ''"));
 
-$updates[] = new Update(1.2, 1.3, array(
-	// Add sort-title column and index
-	"ALTER TABLE `" . DB_PREFIX . "movies`
-		ADD `sort_title` VARCHAR(255) NULL DEFAULT NULL AFTER `title`,
-		ADD INDEX `sort_index` (`sort_title`)",
-
+$ignored_prefix_sql_updates = array(
 	// Create a trigger to automagically create the sort title
 	"DROP TRIGGER IF EXISTS `" . DB_PREFIX ."_sort_title`",
 	"CREATE TRIGGER `" . DB_PREFIX ."_sort_title` BEFORE INSERT ON `" . DB_PREFIX . "movies`
 		FOR EACH ROW
 		BEGIN
 			CASE
-				WHEN LEFT(NEW.title, 4) = 'The ' THEN
-					SET NEW.sort_title = SUBSTRING(NEW.title FROM 5);
-				WHEN LEFT(NEW.title, 2) = 'A ' THEN
-					SET NEW.sort_title = SUBSTRING(NEW.title FROM 3);
-				WHEN LEFT(NEW.title, 4) = 'Het ' THEN
-					SET NEW.sort_title = SUBSTRING(NEW.title FROM 5);
-				WHEN LEFT(NEW.title, 3) = 'De ' THEN
-					SET NEW.sort_title = SUBSTRING(NEW.title FROM 4);
+			" . generate_prefix_remove_sql("
+				WHEN LEFT(NEW.title, %d) = '%s' THEN
+					SET NEW.sort_title = SUBSTRING(NEW.title FROM %d);
+			", $ignored_prefixes) . "
 				ELSE
 					SET NEW.sort_title = NEW.title;
 			END CASE;
@@ -166,18 +156,38 @@ $updates[] = new Update(1.2, 1.3, array(
 	// Create the sort_title value for all existing movies
 	"UPDATE `" . DB_PREFIX . "movies`
 		SET sort_title = CASE
-			WHEN LEFT(title, 4) = 'The ' THEN
-				SUBSTRING(title FROM 5)
-			WHEN LEFT(title, 2) = 'A ' THEN
-				SUBSTRING(title FROM 3)
-			WHEN LEFT(title, 4) = 'Het ' THEN
-				SUBSTRING(title FROM 5)
-			WHEN LEFT(title, 3) = 'De ' THEN
-				SUBSTRING(title FROM 4)
+			" . generate_prefix_remove_sql("
+			WHEN LEFT(title, %d) = '%s' THEN
+				SUBSTRING(title FROM %d)
+			", $ignored_prefixes) . "
 			ELSE
 				title
-		END"));
+		END");
 
+$updates[] = new Update(1.2, 1.3, array_merge(array(
+	// Add sort-title column and index
+	"ALTER TABLE `" . DB_PREFIX . "movies`
+		ADD `sort_title` VARCHAR(255) NULL DEFAULT NULL AFTER `title`,
+		ADD INDEX `sort_index` (`sort_title`)"),
+	$ignored_prefix_sql_updates
+));
+
+$updates[] = new Update(1.3, 1.4, $ignored_prefix_sql_updates);
+
+function generate_prefix_remove_sql($format, $prefixes)
+{
+	$sql = '';
+	
+	foreach ($prefixes as $prefix)
+	{
+		// WHEN LEFT(NEW.title, 4) = 'The ' THEN
+		//   SET NEW.sort_title = SUBSTRING(NEW.title FROM 5);
+		$sql .= sprintf($format,
+				strlen($prefix) + 1, $prefix . ' ', strlen($prefix) + 2);
+	}
+	
+	return $sql;
+}
 
 $conn = mysql_connect(DB_HOST, DB_USER, DB_PASS) or die('Could not connect: ' . mysql_error());
 mysql_select_db(DB_NAME, $conn) or die('Could not select database');

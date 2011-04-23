@@ -153,7 +153,7 @@ endforeach;
     <script type="text/javascript" src="./_scripts/search.js"></script>
     <script type="text/javascript" src="./_scripts/sort.js"></script>
     <script type="text/javascript">
-      Sort.prefixExpression = /^(<?php echo strtolower(implode('|', $GLOBALS['ignored_prefixes'])) ?>)\s/;
+      Sort.prefixExpression = /^(<?php echo strtolower(implode('|', $GLOBALS['ignoredPrefixes'])) ?>)\s/;
     </script>
     <script type="text/javascript" src="./_scripts/compare.js"></script>
 <!--<![endif]-->

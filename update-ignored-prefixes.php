@@ -30,7 +30,7 @@ $ignored_prefix_sql_updates = array(
 			" . generate_prefix_remove_sql("
 				WHEN LEFT(NEW.title, %d) = '%s' THEN
 					SET NEW.sort_title = SUBSTRING(NEW.title FROM %d);
-			", $ignored_prefixes) . "
+			", $ignoredPrefixes) . "
 				ELSE
 					SET NEW.sort_title = NEW.title;
 			END CASE;
@@ -42,7 +42,7 @@ $ignored_prefix_sql_updates = array(
 			" . generate_prefix_remove_sql("
 			WHEN LEFT(title, %d) = '%s' THEN
 				SUBSTRING(title FROM %d)
-			", $ignored_prefixes) . "
+			", $ignoredPrefixes) . "
 			ELSE
 				title
 		END");

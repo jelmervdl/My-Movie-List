@@ -186,7 +186,13 @@ $modernLanguages = array(
 
 $modernLanguagesFlipped = array_flip($modernLanguages);
 
-
+// Fallback for when the user hasn't configured this in their settings.inc.php
+if (empty($ignoredPrefixes))
+	$ignoredPrefixes = array(
+		'A', 'The',
+		'De', 'Het', 'Een',
+		'Le', 'La',
+		'Der', 'Die', 'Das');
 
 
 ?>

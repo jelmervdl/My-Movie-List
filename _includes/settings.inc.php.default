@@ -20,7 +20,7 @@ $users = array(
 /* Prefixes that are ignored in movie titles when sorting */
 /* You should run the $ignored_prefix_sql_updates queries in update.php when
 you change this */
-$ignored_prefixes = array(
+$ignoredPrefixes = array(
 	'A', 'The',
 	'De', 'Het', 'Een',
 	'Le', 'La',

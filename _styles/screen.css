@@ -43,6 +43,7 @@ a {
   }
 
 .message {
+  display: auto;
   font-weight: bold;
   margin: 2em 0 1em;
   text-align: center;
@@ -648,6 +649,7 @@ table {
     border-radius: 20em;
     -moz-border-radius: 20em;
     -webkit-border-radius: 20em;
+    -webkit-appearance: none; /* fixes weird background on iOS */
     display: block;
     color: #000;
     font: 1.2em "Times New Roman", Times, serif;
@@ -693,7 +695,7 @@ table {
 /* mobile (read: iPhone) css */
 @media screen and (max-width: 320px) {
   body {
-    margin: 48px 2em 2em 2em;
+    margin: 32px 2em 2em 2em;
   }
   
   * {
@@ -702,11 +704,21 @@ table {
     -moz-box-sizing: border-box;
   }
   
+  body > h1,
+  body > p {
+    display: none;
+  }
+  
   /* Hide all columns except title and rating */
   #main th,
   #main td {
     display: none;
     height: 32px;
+    text-align: left;
+  }
+  
+  #main td span {
+    display: none;
   }
 
   #main th:nth-child(1),
@@ -726,8 +738,8 @@ table {
     top: 0;
     left: 0;
     width: 100%;
-    height: 42px;
-    padding-top: 42px; /* make texts disappear */
+    height: 48px;
+    padding-top: 48px; /* make texts disappear */
     overflow: hidden;
   }
   
@@ -735,7 +747,7 @@ table {
   #actions input {
     width: 90%;
     height: 32px;
-    top: 5px;
+    top: 16px;
     right: 5%;
     -webkit-border-radius: 16px;
     font: 15px Helvetica, sans-serif;
@@ -745,6 +757,10 @@ table {
 /* iPhone in landscape mode: show everything, except those space-taking
 columns cast and crew. You can use your iPad or IMDb for those. */
 @media screen and (max-width: 800px) {
+  body {
+    margin: 0em 2em 2em 2em; /* Align 'Movies' with search field */
+  }
+  
   /* Hide crew and cast columns  */
   #main th:nth-child(2),
   #main td:nth-child(2),

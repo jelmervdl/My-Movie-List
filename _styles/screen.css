@@ -729,7 +729,6 @@ table {
     height: 42px;
     padding-top: 42px; /* make texts disappear */
     overflow: hidden;
-    background: -webkit-gradient(linear, left top, left bottom, from(silver),to(gray));
   }
   
   /* Make search box a bit more native looking */

@@ -142,13 +142,6 @@ endforeach;
     <script type="text/javascript" src="./_scripts/compare.js"></script>
     <script type="text/javascript">
       Sort.prefixExpression = /^(<?php echo strtolower(implode('|', $GLOBALS['ignoredPrefixes'])) ?>)\s/;
-      setTimeout(function() {
-        try {
-          // Check if we are using the mobile phone styles. If so, hide the search field.
-          if (getComputedStyle(document.getElementById('actions')).getPropertyValue('overflow') == 'hidden')
-            window.scrollTo(0,42);
-        } catch (e) {}
-      }, 0);
     </script>
   </body>
 </html>

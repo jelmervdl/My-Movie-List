@@ -692,10 +692,26 @@ table {
     color: #333;
   }
 
+/* iPhone in landscape mode: show everything, except those space-taking
+columns cast and crew. You can use your iPad or IMDb for those. */
+@media screen and (max-width: 800px) {
+  body {
+    margin: 0em 2em 2em 2em; /* Align 'Movies' with search field */
+  }
+
+  /* Hide crew and cast columns  */
+  #main th:nth-child(2),
+  #main td:nth-child(2),
+  #main th:nth-child(3),
+  #main td:nth-child(3) {
+    display: none;
+  }
+}
+
 /* mobile (read: iPhone) css */
 @media screen and (max-width: 320px) {
   body {
-    margin: 32px 2em 2em 2em;
+    margin: 2em;
   }
   
   * {
@@ -751,21 +767,5 @@ table {
     right: 5%;
     -webkit-border-radius: 16px;
     font: 15px Helvetica, sans-serif;
-  }
-}
-
-/* iPhone in landscape mode: show everything, except those space-taking
-columns cast and crew. You can use your iPad or IMDb for those. */
-@media screen and (max-width: 800px) {
-  body {
-    margin: 0em 2em 2em 2em; /* Align 'Movies' with search field */
-  }
-  
-  /* Hide crew and cast columns  */
-  #main th:nth-child(2),
-  #main td:nth-child(2),
-  #main th:nth-child(3),
-  #main td:nth-child(3) {
-    display: none;
   }
 }

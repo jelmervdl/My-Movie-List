@@ -5,6 +5,7 @@
     <title><?php echo TITLE; ?></title>
     <link rel="icon" type="image/ico" href="./favicon.ico">
     <link rel="stylesheet" type="text/css" href="./_styles/screen.css">
+    <meta name="viewport" content="initial-scale=1.0 maximum-scale=1.0 width=device-width"> 
     <link rel="search" type="application/opensearchdescription+xml" href="./opensearch.php" title="<?php echo TITLE; ?>">
     <meta name="amount-of-names" content="<?php echo $amountOfNames; ?>">
     <!--[if IE]><link rel="stylesheet" type="text/css" href="./_styles/screen-ie.css"><![endif]-->
@@ -128,9 +129,9 @@ endforeach;
 <?php else : ?>
     <div id="actions"><a href="login.php">Login</a></div>
 <?php endif; ?>
-<!--[if gte IE 8]>
     <script type="text/javascript" src="./_scripts/dlite-1.0.js"></script>
     <script type="text/javascript" src="./_scripts/movies.js"></script>
+    <script type="text/javascript" src="./_scripts/sort.js"></script>
     <script type="text/javascript" src="./_scripts/imdb-top-250.js.php"></script>
 <?php if (LOGGEDIN) : ?>
     <script type="text/javascript" src="./_scripts/edit.js"></script>
@@ -138,24 +139,16 @@ endforeach;
     <script type="text/javascript" src="./_scripts/stats.js"></script>
     <script type="text/javascript" src="./_scripts/slider.class.js"></script>
     <script type="text/javascript" src="./_scripts/search.js"></script>
-    <script type="text/javascript" src="./_scripts/sort.js"></script>
     <script type="text/javascript" src="./_scripts/compare.js"></script>
-<![endif]-->
-<!--[if !IE]><!-->
-    <script type="text/javascript" src="./_scripts/dlite-1.0.js"></script>
-    <script type="text/javascript" src="./_scripts/movies.js"></script>
-    <script type="text/javascript" src="./_scripts/imdb-top-250.js.php"></script>
-<?php if (LOGGEDIN) : ?>
-    <script type="text/javascript" src="./_scripts/edit.js"></script>
-<?php endif; ?>
-    <script type="text/javascript" src="./_scripts/stats.js"></script>
-    <script type="text/javascript" src="./_scripts/slider.class.js"></script>
-    <script type="text/javascript" src="./_scripts/search.js"></script>
-    <script type="text/javascript" src="./_scripts/sort.js"></script>
     <script type="text/javascript">
       Sort.prefixExpression = /^(<?php echo strtolower(implode('|', $GLOBALS['ignoredPrefixes'])) ?>)\s/;
+      setTimeout(function() {
+        try {
+          // Check if we are using the mobile phone styles. If so, hide the search field.
+          if (getComputedStyle(document.getElementById('actions')).getPropertyValue('overflow') == 'hidden')
+            window.scrollTo(0,42);
+        } catch (e) {}
+      }, 0);
     </script>
-    <script type="text/javascript" src="./_scripts/compare.js"></script>
-<!--<![endif]-->
   </body>
 </html>

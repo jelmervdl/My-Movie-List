@@ -23,7 +23,7 @@ var Stats = {
     var aElm = document.createElement('a');
       aElm.href = 'javascript:Stats.open()';
       aElm.appendChild(document.createTextNode('Stats'));
-      Movies.actionsBoxElm.appendChild(aElm);
+      Movies.addAction(aElm);
   },
   
   

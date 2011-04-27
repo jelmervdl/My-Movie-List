@@ -49,7 +49,7 @@ var Search = {
     var aElm = document.createElement('a');
       aElm.href = 'javascript:Search.initAdvanced()';
       aElm.appendChild(document.createTextNode('Advanced search'));
-      Movies.actionsBoxElm.appendChild(aElm);
+      Movies.addAction(aElm);
   },
   
   

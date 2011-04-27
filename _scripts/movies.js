@@ -31,6 +31,13 @@ var Movies = {
     Movies.applyImdb();
   },
   
+  // Add an element to the actions div
+  addAction: function(elm) {
+    Movies.actionsBoxElm.appendChild(elm);
+    // add spaces between elements for word-wrapping
+    Movies.actionsBoxElm.appendChild(document.createTextNode(' '));
+  },
+  
   
   // Zebra stripes the table
   // Accepts an argument: a table that needs to be striped

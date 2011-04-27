@@ -17,7 +17,7 @@ var Edit = {
     var aElm = document.createElement('a');
       aElm.href = 'javascript:Edit.editMode()';
       aElm.appendChild(document.createTextNode('Edit'));
-      Movies.actionsBoxElm.appendChild(aElm);
+      Movies.addAction(aElm);
   },
   
   

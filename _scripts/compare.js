@@ -13,7 +13,7 @@ var Compare = {
       aElm.href = 'javascript:Compare.open();';
       aElm.appendChild(document.createTextNode('Compare'));
     
-    Movies.actionsBoxElm.appendChild(aElm);
+    Movies.addAction(aElm);
     
     Compare.moviesBothLike = [];
     Compare.moviesBothLikeCounter = 0;

@@ -11,6 +11,25 @@ var Search = {
     
     Search.createHtml();
     Search.checkUrlForSearch();
+    addEvent(window, 'keydown', Search.catchShortcutKeys)
+  },
+  
+  
+  catchShortcutKeys: function(e) {
+    if (e.keyCode == 191) { // slash-key
+      Search.inputElm.focus();
+      stopDefault(e);
+    }
+  },
+  
+  
+  
+  catchControlKeys: function(e) {
+    if (e.keyCode == 27) { // escape-key
+      Search.inputElm.value = ''
+      Search.doSimpleSearch();
+      Search.inputElm.blur();
+    }
   },
   
   
@@ -21,6 +40,7 @@ var Search = {
       Search.inputElm.defaultValue = Search.config.defaultTerm;
       addClass(Search.inputElm, 'placeholder-text');
       addEvent(Search.inputElm, 'change', Search.doSimpleSearch);
+      addEvent(Search.inputElm, 'keydown', Search.catchControlKeys);
       addEvent(Search.inputElm, 'keyup', Search.doSimpleSearch);
       addEvent(Search.inputElm, 'focus', Search.niceFocus);
       addEvent(Search.inputElm, 'blur', Search.niceBlur);

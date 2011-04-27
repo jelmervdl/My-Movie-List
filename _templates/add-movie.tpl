@@ -23,5 +23,6 @@
     </div>
     
     <div id="actions"><a href="./">Back to the list&hellip;</a></div>
+    <script>var q = document.getElementById('q'); if (q) q.focus() </script>
   </body>
 </html>

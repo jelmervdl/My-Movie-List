@@ -40,12 +40,9 @@ var Movies = {
   
   
   // Zebra stripes the table
-  // Accepts an argument: a table that needs to be striped
-  applyOddEven: function() {
-    if (arguments.length == 1)
-      var trElms = arguments[0].getElementsByTagName('tr');
-    else
-      var trElms = Movies.trElms;
+  // Accepts an optional argument: a table that needs to be striped
+  applyOddEven: function(table) {
+    var trElms = table ? table.getElementsByTagName('tr') : Movies.trElms;
     
     var even = true;
     for (var i = 0; trElms[i]; ++i) {

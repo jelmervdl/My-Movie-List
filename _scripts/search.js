@@ -15,6 +15,8 @@ var Search = {
   },
   
   
+  // Event handler for the page that catches the slash key
+  // (which is a pretty common shortcut key for search)
   catchShortcutKeys: function(e) {
     if (e.keyCode == 191) { // slash-key
       Search.inputElm.focus();
@@ -24,6 +26,7 @@ var Search = {
   
   
   
+  // Event handler that catches control keys in the simple search field.
   catchControlKeys: function(e) {
     if (e.keyCode == 27) { // escape-key
       Search.inputElm.value = ''
@@ -41,7 +44,7 @@ var Search = {
       addClass(Search.inputElm, 'placeholder-text');
       addEvent(Search.inputElm, 'change', Search.doSimpleSearch);
       addEvent(Search.inputElm, 'keydown', Search.catchControlKeys);
-      addEvent(Search.inputElm, 'keyup', Search.doSimpleSearch);
+      addEvent(Search.inputElm, 'keyup', Search.scheduleSimpleSearch);
       addEvent(Search.inputElm, 'focus', Search.niceFocus);
       addEvent(Search.inputElm, 'blur', Search.niceBlur);
       Movies.actionsBoxElm.insertBefore(Search.inputElm, Movies.actionsBoxElm.getElementsByTagName('a')[0]);
@@ -182,6 +185,14 @@ var Search = {
     Search.allGenresChecked = Search.allGenresChecked ? false : true;
     
     Search.doSearch();
+  },
+  
+  
+  // Plan a search. The actual search is delayed
+  scheduleSimpleSearch: function() {
+    if (Search.scheduledSearch)
+      clearTimeout(Search.scheduledSearch);
+    Search.scheduledSearch = setTimeout(Search.doSimpleSearch, 150);
   },
   
   

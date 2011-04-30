@@ -53,5 +53,6 @@ endif;
     </div>
      
     <div id="actions"><a href="./">Back to the list&hellip;</a></div>
+    <script>var u = document.getElementById('username'); if (u) u.focus() </script>
   </body>
 </html>

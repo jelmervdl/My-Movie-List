@@ -18,16 +18,7 @@ endif;
 
           <form action="add-movie.php">
             <p>
-              <label for="id">IMDb ID</label>
-              <input type="text" class="text" name="id" id="id">
-              <input type="submit" class="submit" value="Look-up&hellip;">
-              <input type="hidden" name="step" value="3">
-            </p>
-          </form>
-          <p class="or">or</p>
-          <form action="add-movie.php">
-            <p>
-              <label for="q">Search</label>
+              <label for="q">IMDb ID or Search</label>
               <input type="text" class="text" name="q" id="q">
               <input type="submit" class="submit" value="Search&hellip;">
               <input type="hidden" name="step" value="2">

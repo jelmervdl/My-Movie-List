@@ -53,9 +53,12 @@ class AddMovie
     If a search is initiated: view the results.
   */
   static public function Step2() {
-    if (!isset($_GET['q'])) {
-      AddMovie::Step1('invalid-searchterm');
-      exit;
+    if (!isset($_GET['q']))
+      return AddMovie::Step1('invalid-searchterm');
+    
+    if (preg_match("/^\d{7}$/", $_GET['q'])) {
+      $_GET['id'] = $_GET['q'];
+      return AddMovie::Step3($GLOBALS['modernLanguagesFlipped']); // GLOBALS?!
     }
     
     $search = new imdbsearch();

@@ -44,7 +44,7 @@ var Search = {
       addClass(Search.inputElm, 'placeholder-text');
       addEvent(Search.inputElm, 'change', Search.doSimpleSearch);
       addEvent(Search.inputElm, 'keydown', Search.catchControlKeys);
-      addEvent(Search.inputElm, 'keyup', Search.scheduleSimpleSearch);
+      addEvent(Search.inputElm, 'keyup', Search.deferSimpleSearch);
       addEvent(Search.inputElm, 'focus', Search.niceFocus);
       addEvent(Search.inputElm, 'blur', Search.niceBlur);
       Movies.actionsBoxElm.insertBefore(Search.inputElm, Movies.actionsBoxElm.getElementsByTagName('a')[0]);
@@ -172,7 +172,7 @@ var Search = {
     minElm.value = props.handle1Value;
     maxElm.value = props.handle2Value;
     
-    Search.doSearch();
+    Search.deferSearch();
   },
   
   
@@ -188,11 +188,19 @@ var Search = {
   },
   
   
+  // Plan a simple search. The actual search is delayed
+  deferSimpleSearch: function() {
+    if (Search.isAdvanced)
+      Search.advancedInputElm.value = Search.inputElm.value;
+    Search.deferSearch();
+  },
+  
+  
   // Plan a search. The actual search is delayed
-  scheduleSimpleSearch: function() {
+  deferSearch: function() {
     if (Search.scheduledSearch)
       clearTimeout(Search.scheduledSearch);
-    Search.scheduledSearch = setTimeout(Search.doSimpleSearch, 150);
+    Search.scheduledSearch = setTimeout(Search.doSearch, 150);
   },
   
   

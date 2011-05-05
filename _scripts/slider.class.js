@@ -38,13 +38,17 @@ var Slider = {
     Slider.updateUI(config.sliderId);
     
     addEvent(handle1Elm, 'mousedown', Slider.slideStart);
+    addEvent(handle1Elm, 'touchstart', Slider.touchStart);
     addEvent(handle2Elm, 'mousedown', Slider.slideStart);
+    addEvent(handle2Elm, 'touchstart', Slider.touchStart);
     addEvent(document.body, 'mouseup', Slider.slideEnd);
+    addEvent(document.body, 'touchend', Slider.touchEnd);
     
     Slider.registerMoving = false;
     
     if (!Slider.initiatedBefore) {
       addEvent(document.body, 'mousemove', Slider.registerMove);
+      addEvent(document.body, 'touchmove', Slider.registerTouch)
     }
     
     Slider.initiatedBefore = true;
@@ -99,8 +103,6 @@ var Slider = {
   
   // When the user mouse-ups the mousebutton.
   slideEnd: function(e) {
-    stopDefault(e);
-    
     if (!Slider.currentSliderElm)
       return;
     
@@ -158,6 +160,25 @@ var Slider = {
     
     if (Slider.sliders[Slider.currentSliderElm.id][11])
       Slider.sliders[Slider.currentSliderElm.id][11]({'sliderId':Slider.currentSliderElm.id,'handle1Value':Math.round(Slider.sliders[Slider.currentSliderElm.id][9]),'handle2Value':Math.round(Slider.sliders[Slider.currentSliderElm.id][10])});
+  },
+  
+  
+  // When the user touches the slider handle
+  touchStart: function(e) {
+    stopDefault(e);
+    Slider.slideStart(e.touches.item(0));
+  },
+  
+  
+  // When the user removes his vinger from the screen
+  touchEnd: function(e) {
+    Slider.slideEnd(e.touches.item(0));
+  },
+  
+  
+  // When the user drags his vinger accross the screen
+  registerTouch: function(e) {
+    Slider.registerMove(e.touches.item(0));
   },
   
   

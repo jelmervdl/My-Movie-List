@@ -705,6 +705,8 @@ var Stats = {
     
     Stats.canvasElm.onmouseover = Stats.fixTooltipPosition;
     Stats.canvasElm.onmousemove = Stats.viewTooltip;
+    Stats.canvasElm.ontouchstart = Stats.touchStart;
+    Stats.canvasElm.ontouchmove = Stats.touchMove;
     
     Stats.panelYearInfoElm = document.createElement('div');
       Stats.panelYearInfoElm.id = 'panel-year-info';
@@ -718,6 +720,40 @@ var Stats = {
     Stats.statsArea.appendChild(Stats.panelYearInfoElm);
   },
   
+  
+  // Called when the vinger touches the canvas.
+  touchStart: function(e) {
+    // DO NOT prevent default as this would disrupt horizontal scrolling.
+    Stats.saveLastTouchPosition(e);
+    Stats.fixTooltipPosition();
+  },
+  
+  // Called when the vinger is moved over the canvas
+  touchMove: function(e) {
+    // Only when horizontally dragging move, do not disturb vertical scrolling
+    if (Stats.isHorizontalDrag(e)) {
+      e.preventDefault();
+      Stats.viewTooltip(e.touches.item(0));
+    }
+    Stats.saveLastTouchPosition(e);
+  },
+  
+  // Saves last touch event position. Used to calculate dragging direction
+  saveLastTouchPosition: function(e) {
+    Stats.lastTouchPosition = {
+      x: e.touches.item(0).pageX,
+      y: e.touches.item(0).pageY
+    };
+  },
+  
+  
+  // Detects if the drag move with the vinger is mainly horizontal.
+  isHorizontalDrag: function(touchEvent) {
+    var e = touchEvent.touches.item(0);
+    return Math.abs(e.pageX - Stats.lastTouchPosition.x)
+         > Math.abs(e.pageY - Stats.lastTouchPosition.y);
+  },
+    
   
   viewTooltip: function(e) {
     var posx = 0;

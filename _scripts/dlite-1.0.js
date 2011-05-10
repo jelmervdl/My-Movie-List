@@ -16,9 +16,7 @@ var dLite = function () {
 			try {
 				functionsToCall[i]();
 			}
-			catch (e) {
-				// Prevent possible reference errors
-			}
+			catch (e) {}
 		}
 		functionsToCall = [];
 	};
@@ -93,7 +91,7 @@ var dLite = function () {
 					elm = elm || document;
 					var classes = className.split(" "),
 						classesToCheck = "",
-						xhtmlNamespace = "http://www.w3.org/1999/xhtml",
+						xhtmlNamespace = "http:/" + "/www.w3.org/1999/xhtml",
 						namespaceResolver = (document.documentElement.namespaceURI === xhtmlNamespace)? xhtmlNamespace : null,
 						returnElements = [],
 						elements,
@@ -102,10 +100,10 @@ var dLite = function () {
 						classesToCheck += "[contains(concat(' ', @class, ' '), ' " + classes[j] + " ')]";
 					}
 					try	{
-						elements = document.evaluate(".//" + tag + classesToCheck, elm, namespaceResolver, 0, null);
+						elements = document.evaluate("./" + "/" + tag + classesToCheck, elm, namespaceResolver, 0, null);
 					}
 					catch (e) {
-						elements = document.evaluate(".//" + tag + classesToCheck, elm, null, 0, null);
+						elements = document.evaluate("./" + "/" + tag + classesToCheck, elm, null, 0, null);
 					}
 					while ((node = elements.iterateNext())) {
 						returnElements.push(node);

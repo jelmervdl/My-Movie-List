@@ -160,7 +160,7 @@ class AddMovie
       
       if ($_POST['english-title'] != 'none') {
         $englishTitle = AddMovie::utf8ify($aka[$_POST['english-title']]['title']);
-        $englishTitle = substr($englishTitle, 1, strrpos($englishTitle, '"') - 1);
+        //$englishTitle = trim($englishTitle, 1, strrpos($englishTitle, '"') - 1);
       }
       
       $language = 'en';

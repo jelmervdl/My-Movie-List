@@ -5,7 +5,7 @@ if (count($results) > 0) :
           <ul>
           <?php foreach ($results as $result): ?>
             <li>
-              <a href="add-movie.php?step=3&amp;id=<?php echo $result->id(); ?>">
+              <a href="add-movie.php?step=3&amp;id=<?php echo substr($result->id(), 2); ?>">
                 <?php if ($result->image()): ?>
                 <img class="poster" src="<?php echo $result->image()->url ?>">
                 <?php endif ?>

@@ -4,6 +4,8 @@ require_once('_includes/main.php');
 require_once('_includes/imdbphp/imdb.class.php');
 require_once('_includes/imdbphp/imdbsearch.class.php');
 
+require_once '_includes/imdb.php';
+
 
 
 if (!LOGGEDIN) {
@@ -60,10 +62,8 @@ class AddMovie
       $_GET['id'] = $_GET['q'];
       return AddMovie::Step3($GLOBALS['modernLanguagesFlipped']); // GLOBALS?!
     }
-    
-    $search = new imdbsearch();
-    $search->setsearchname($_GET['q']);
-    $results = $search->results();
+
+    $results = imdb\imdb()->find($_GET['q']);
 
     $tpl = new Template(DOCUMENT_ROOT . '_templates/add-movie.tpl');
     $content = new Template(DOCUMENT_ROOT . '_templates/step-2.tpl');

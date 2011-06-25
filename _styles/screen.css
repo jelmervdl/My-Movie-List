@@ -474,6 +474,10 @@ select {
     padding: 1px;
     width: 20%;
   }
+
+  #add .poster {
+    max-height: 60px;
+  }
   
 #edit-titles .body div {
   float: left;

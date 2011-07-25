@@ -18,7 +18,7 @@ switch (STEP) {
 
 class Login
 {
-  public function Step1($message = false) {
+  static public function Step1($message = false) {
     if (isset($_GET['requestURI']))
       $_SESSION['requestURI'] = $_GET['requestURI'];
     
@@ -31,7 +31,7 @@ class Login
   }
   
   
-  public function Step2($users) {
+  static public function Step2($users) {
     if (!isset($_POST['username']) || !isset($_POST['password'])) {
       Login::Step1('invalid-request');
       exit();

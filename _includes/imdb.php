@@ -281,7 +281,7 @@ class FopenRequest implements IMDbRequest
 		
 		$context = stream_context_create($opts);
 		
-		$response = file_get_contents($url, false, $context);
+		$response = file_get_contents($this->_url, false, $context);
 		
 		if ($response === false)
 			$this->_set_error_msg('file_get_contents failed');

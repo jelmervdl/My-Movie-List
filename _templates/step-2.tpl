@@ -7,7 +7,7 @@ if (count($results) > 0) :
             <li>
               <a href="add-movie.php?step=3&amp;id=<?php echo substr($result->id(), 2); ?>">
                 <?php if ($result->image()): ?>
-                <img class="poster" src="<?php echo $result->image()->url ?>">
+                <img class="poster" src="imdb-proxy.php?url=<?php echo urlencode($result->image()->url) ?>">
                 <?php endif ?>
                 <?php echo $result->title(); ?>
                 (<?php echo $result->year(); ?>)

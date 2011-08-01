@@ -64,13 +64,29 @@ class AddMovie
     }
 
     $results = imdb\imdb()->find($_GET['q']);
-
-    $tpl = new Template(DOCUMENT_ROOT . '_templates/add-movie.tpl');
-    $content = new Template(DOCUMENT_ROOT . '_templates/step-2.tpl');
-    $content->set('results', $results);
     
-    $tpl->set('content', $content);
-    echo $tpl->fetch();
+    if (isset($_REQUEST['content-type'])
+      && $_REQUEST['content-type'] == 'application/json') {
+      header('Content-Type: application/json');
+      echo json_encode(array_map(
+        function($movie) {
+          return array(
+            'id' => $movie->id(),
+            'title' => $movie->title(),
+            'year' => $movie->year(),
+            'image' => $movie->image() ? $movie->image()->url : null
+          );
+        },
+        $results));
+    }
+    else {
+      $tpl = new Template(DOCUMENT_ROOT . '_templates/add-movie.tpl');
+      $content = new Template(DOCUMENT_ROOT . '_templates/step-2.tpl');
+      $content->set('results', $results);
+      
+      $tpl->set('content', $content);
+      echo $tpl->fetch();
+    }
   }
   
   
